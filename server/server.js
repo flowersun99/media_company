@@ -28,7 +28,25 @@ app.get('/api/articles', async (req, res) => {
   }
 });
 
-// 수동 크롤링 트리거 (테스트용)
+// 수동 크롤링 트리거 (테스트용) - GET과 POST 모두 지원
+app.get('/api/crawl', async (req, res) => {
+  try {
+    console.log('수동 크롤링 시작...');
+    const articles = await crawlAllSources();
+    res.json({
+      success: true,
+      message: '크롤링이 완료되었습니다.',
+      count: articles.length
+    });
+  } catch (error) {
+    console.error('크롤링 오류:', error);
+    res.status(500).json({
+      success: false,
+      error: '크롤링 중 오류가 발생했습니다.'
+    });
+  }
+});
+
 app.post('/api/crawl', async (req, res) => {
   try {
     console.log('수동 크롤링 시작...');
